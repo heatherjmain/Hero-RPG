@@ -1,9 +1,11 @@
-var Hero = function(name, favouriteFood) {
+var Hero = function(name, fullHealth, favouriteFood, damageValue) {
   this.name = name;
   this.health = 100;
+  this.fullHealth = fullHealth;
   this.favouriteFood = favouriteFood;
   this.tasks = [];
   this.xpPoints = 0;
+  this.damageValue = damageValue;
 }
 
 
@@ -17,9 +19,16 @@ Hero.prototype.eat = function(food) {
 
   if (isFaveFood && food.replenishmentValue > 0) {
     this.health += (food.replenishmentValue * 1.5)
+    if (this.health > this.fullHealth) {
+      this.health = this.fullHealth;
+    }
   } else {
   this.health += food.replenishmentValue;
+    if (this.health > this.fullHealth) {
+      this.health = this.fullHealth;
+    }
   }
+
 }
 
 
@@ -53,6 +62,14 @@ Hero.prototype.viewCompleteOrIncompleteTasks = function(requestedStatus) {
     }
   });
   return requestedTasks;
+}
+
+Hero.prototype.attack = function(baddie) {
+  var hitValue = ((this.health / 100) * this.damageValue);
+  baddie.health -= hitValue;
+  if (baddie.health <= 0) {
+    return "Take that, " + baddie.name + "!";
+  }
 }
 
 

@@ -3,6 +3,7 @@ var Hero = require("../hero")
 var Food = require("../food")
 var Task = require("../task")
 var Rat = require("../rat")
+var Baddie = require("../baddie")
 
 
 describe("Hero", function() {
@@ -13,15 +14,17 @@ describe("Hero", function() {
   var task2;
   var task3;
   var rat1;
+  var baddie1;
 
   beforeEach(function() {
-    hero1 = new Hero("Bananaman", "banana");
+    hero1 = new Hero("Bananaman", 150, "banana", 20);
     banana = new Food("banana", 10);
     tomato = new Food("tomato", 7);
     task1 = new Task("Save the World", 500, 10, 500);
     task2 = new Task("Buy bananas", 10, 50, 10);
     task3 = new Task("Fight Super Enemy", 250, 30, 250);
     rat1 = new Rat("Rattus");
+    baddie1 = new Baddie("Appleman", 10);
   });
 
   it("sould have a name", function() {
@@ -38,6 +41,10 @@ describe("Hero", function() {
 
   it("should have no tasks at start", function() {
     assert.strictEqual(hero1.tasks.length, 0);
+  });
+
+  it("should start with 0 xpPoints", function() {
+    assert.strictEqual(hero1.xpPoints, 0);
   });
 
   it("should be able to talk", function() {
@@ -119,6 +126,55 @@ describe("Hero", function() {
     assert.strictEqual(hero1.health, 83);
   });
 
+  it("should have a moximum health value of 150", function() {
+    hero1.eat(banana);
+    hero1.eat(banana);
+    hero1.eat(banana);
+    hero1.eat(banana);
+    hero1.eat(tomato);
+    assert.strictEqual(hero1.health, 150);
+  });
+
+  it("should be able to attack baddie and reduce baddie health", function() {
+    baddie1.attack(hero1);
+    hero1.attack(baddie1);
+    assert.strictEqual(baddie1.health, 82);
+  })
+
+  it("should die at 0 health", function() {
+    baddie1.attack(hero1);
+    baddie1.attack(hero1);
+    baddie1.attack(hero1);
+    baddie1.attack(hero1);
+    baddie1.attack(hero1);
+    baddie1.attack(hero1);
+    baddie1.attack(hero1);
+    baddie1.attack(hero1);
+    baddie1.attack(hero1);
+    baddie1.attack(hero1);
+    assert.strictEqual(baddie1.attack(hero1), "Victory, Bananaman has perished!");
+  });
+
+  it("should be able to battle", function() {
+    baddie1.attack(hero1);
+    hero1.attack(baddie1);
+    baddie1.attack(hero1);
+    hero1.attack(baddie1);
+    hero1.eat(banana);
+    rat1.touchFood(banana);
+    hero1.eat(banana);
+    baddie1.attack(hero1);
+    baddie1.attack(hero1);
+    baddie1.attack(hero1);
+    hero1.attack(baddie1);
+    hero1.attack(baddie1);
+    hero1.attack(baddie1);
+    baddie1.attack(hero1);
+    hero1.attack(baddie1);
+    baddie1.attack(hero1);
+    hero1.attack(baddie1);
+    assert.strictEqual(hero1.attack(baddie1), "Take that, Appleman!");
+  });
 
 
 
