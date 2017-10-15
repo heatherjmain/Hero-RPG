@@ -2,6 +2,7 @@ var assert = require("assert")
 var Hero = require("../hero")
 var Food = require("../food")
 var Task = require("../task")
+var Rat = require("../rat")
 
 
 describe("Hero", function() {
@@ -11,6 +12,7 @@ describe("Hero", function() {
   var task1;
   var task2;
   var task3;
+  var rat1;
 
   beforeEach(function() {
     hero1 = new Hero("Bananaman", "banana");
@@ -19,6 +21,7 @@ describe("Hero", function() {
     task1 = new Task("Save the World", 500, 10, 500);
     task2 = new Task("Buy bananas", 10, 50, 10);
     task3 = new Task("Fight Super Enemy", 250, 30, 250);
+    rat1 = new Rat("Rattus");
   });
 
   it("sould have a name", function() {
@@ -81,13 +84,13 @@ describe("Hero", function() {
     assert.deepStrictEqual(hero1.tasks, [task2, task3, task1]);
   });
 
-  it("should be able to complete a task", function() {
+  it("should be able to complete a task and earn xpPoints", function() {
     hero1.addTask(task1);
     hero1.addTask(task2);
     hero1.addTask(task3);
     hero1.completeTask(task1);
     assert.strictEqual(hero1.tasks[0].complete, true);
-
+    assert.strictEqual(hero1.xpPoints, 500);
   });
 
   it("should be able to view all complete tasks", function() {
@@ -106,6 +109,14 @@ describe("Hero", function() {
     hero1.completeTask(task1);
     hero1.completeTask(task2);
     assert.deepStrictEqual(hero1.viewCompleteOrIncompleteTasks(false), [task3]);
+  });
+
+  it("should lose health when consuming poisonous food", function() {
+    rat1.touchFood(banana);
+    rat1.touchFood(tomato);
+    hero1.eat(banana);
+    hero1.eat(tomato);
+    assert.strictEqual(hero1.health, 83);
   });
 
 

@@ -3,6 +3,7 @@ var Hero = function(name, favouriteFood) {
   this.health = 100;
   this.favouriteFood = favouriteFood;
   this.tasks = [];
+  this.xpPoints = 0;
 }
 
 
@@ -14,7 +15,7 @@ Hero.prototype.talk = function(phrase) {
 Hero.prototype.eat = function(food) {
   var isFaveFood = (food.name === this.favouriteFood)
 
-  if (isFaveFood) {
+  if (isFaveFood && food.replenishmentValue > 0) {
     this.health += (food.replenishmentValue * 1.5)
   } else {
   this.health += food.replenishmentValue;
@@ -39,6 +40,7 @@ Hero.prototype.completeTask = function(taskToSearch) {
     return task === taskToSearch;
   })
   taskToComplete.complete = true;
+  this.xpPoints += taskToComplete.reward;
 }
 
 
