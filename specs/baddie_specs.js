@@ -15,6 +15,10 @@ describe ("Baddie",function() {
     assert.strictEqual(baddie1.name, "Appleman");
   });
 
+  it("should be able to talk", function() {
+    assert.strictEqual(baddie1.talk(), "All fear, the mighty Appleman");
+  });
+
   it("should be able to attack hero and reduce hero health", function() {
     baddie1.attack(hero1);
     assert.strictEqual(hero1.health, 90);

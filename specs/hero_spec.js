@@ -4,27 +4,32 @@ var Food = require("../food")
 var Task = require("../task")
 var Rat = require("../rat")
 var Baddie = require("../baddie")
+var Crow = require("../crow")
 
 
 describe("Hero", function() {
   var hero1;
   var banana;
   var tomato;
+  var pear;
   var task1;
   var task2;
   var task3;
   var rat1;
   var baddie1;
+  var crow1;
 
   beforeEach(function() {
     hero1 = new Hero("Bananaman", 150, "banana", 20);
     banana = new Food("banana", 10);
     tomato = new Food("tomato", 7);
+    pear = new Food("pear", 5);
     task1 = new Task("Save the World", 500, 10, 500);
     task2 = new Task("Buy bananas", 10, 50, 10);
     task3 = new Task("Fight Super Enemy", 250, 30, 250);
     rat1 = new Rat("Rattus");
     baddie1 = new Baddie("Appleman", 10);
+    crow1 = new Crow("Crow");
   });
 
   it("sould have a name", function() {
@@ -47,16 +52,24 @@ describe("Hero", function() {
     assert.strictEqual(hero1.xpPoints, 0);
   });
 
+  it("should start with an empty backpack", function() {
+    assert.deepStrictEqual(hero1.backpack.length, 0);
+  });
+
   it("should be able to talk", function() {
     assert.strictEqual(hero1.talk(), "I am Bananaman.  Ever alert for the call to action");
   });
 
-  it("should be able to eat food and increase health by replensihment value", function() {
+  it("should be able to eat food from backpack and increase health by replensihment value", function() {
+    // crow1.collectFood(hero1, pear);
+    // crow1.collectFood(hero1, banana);
     hero1.eat(tomato);
     assert.strictEqual(hero1.health, 107);
+    // assert.deepStrictEqual(hero1.backpack.length, 2);
   });
 
   it("should increase health by 1.5 x replenishment value if food is favourite food", function() {
+    // crow1.collectFood(banana);
     hero1.eat(banana);
     assert.strictEqual(hero1.health, 115);
   });
@@ -119,6 +132,8 @@ describe("Hero", function() {
   });
 
   it("should lose health when consuming poisonous food", function() {
+    // crow1.collectFood(banana);
+    // crow1.collectFood(tomato);
     rat1.touchFood(banana);
     rat1.touchFood(tomato);
     hero1.eat(banana);
@@ -127,6 +142,11 @@ describe("Hero", function() {
   });
 
   it("should have a moximum health value of 150", function() {
+    // crow1.collectFood(banana);
+    // crow1.collectFood(banana);
+    // crow1.collectFood(banana);
+    // crow1.collectFood(banana);
+    // crow1.collectFood(banana);
     hero1.eat(banana);
     hero1.eat(banana);
     hero1.eat(banana);
@@ -155,7 +175,9 @@ describe("Hero", function() {
     assert.strictEqual(baddie1.attack(hero1), "Victory, Bananaman has perished!");
   });
 
-  it("should be able to battle", function() {
+  it("should be able to win battle", function() {
+    // crow1.collectFood(banana);
+    // crow1.collectFood(banana);
     baddie1.attack(hero1);
     hero1.attack(baddie1);
     baddie1.attack(hero1);
@@ -175,6 +197,32 @@ describe("Hero", function() {
     hero1.attack(baddie1);
     assert.strictEqual(hero1.attack(baddie1), "Take that, Appleman!");
   });
+
+  it("should be able to lose battle", function() {
+    // crow1.collectFood(tomato);
+    // crow1.collectFood(banana);
+    // crow1.collectFood(banana);
+    rat1.touchFood(banana);
+    baddie1.attack(hero1);
+    baddie1.attack(hero1);
+    hero1.attack(baddie1);
+    hero1.eat(tomato);
+    hero1.eat(banana);
+    baddie1.attack(hero1);
+    hero1.attack(baddie1);
+    baddie1.attack(hero1);
+    baddie1.attack(hero1);
+    baddie1.attack(hero1);
+    hero1.eat(banana);
+    baddie1.attack(hero1);
+    hero1.attack(baddie1);
+    baddie1.attack(hero1);
+    baddie1.attack(hero1);
+    hero1.attack(baddie1);
+    baddie1.attack(hero1);
+    baddie1.attack(hero1);
+    assert.strictEqual(baddie1.attack(hero1), "Victory, Bananaman has perished!")
+  })
 
 
 

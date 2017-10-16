@@ -6,16 +6,21 @@ var Hero = function(name, fullHealth, favouriteFood, damageValue) {
   this.tasks = [];
   this.xpPoints = 0;
   this.damageValue = damageValue;
+  this.backpack = [];
 }
 
 
-Hero.prototype.talk = function(phrase) {
+Hero.prototype.talk = function() {
   return ("I am " + this.name + ".  Ever alert for the call to action")
 }
 
 
 Hero.prototype.eat = function(food) {
+  var foodIsInBackpack = this.backpack.indexOf(food);
+  this.backpack.splice(foodIsInBackpack, 1);
+
   var isFaveFood = (food.name === this.favouriteFood)
+
 
   if (isFaveFood && food.replenishmentValue > 0) {
     this.health += (food.replenishmentValue * 1.5)
@@ -30,6 +35,32 @@ Hero.prototype.eat = function(food) {
   }
 
 }
+
+
+// Hero.prototype.eat = function(food) {
+//   var foodIsInBackpack = this.backpack.indexOf(food);
+//   this.backpack.splice(foodIsInBackpack, 1);
+//
+//   var isFaveFood = (foodIsInBackpack.name === this.favouriteFood)
+//
+//
+//   if (isFaveFood && foodIsInBackpack.replenishmentValue > 0) {
+//     this.health += (foodIsInBackpack.replenishmentValue * 1.5)
+//     if (this.health > this.fullHealth) {
+//       this.health = this.fullHealth;
+//     }
+//   } else {
+//   this.health += foodIsInBackpack.replenishmentValue;
+//     if (this.health > this.fullHealth) {
+//       this.health = this.fullHealth;
+//     }
+//   }
+//
+// }
+
+
+
+
 
 
 Hero.prototype.addTask = function(task) {
