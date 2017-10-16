@@ -16,51 +16,30 @@ Hero.prototype.talk = function() {
 
 
 Hero.prototype.eat = function(food) {
-  var foodIsInBackpack = this.backpack.indexOf(food);
-  this.backpack.splice(foodIsInBackpack, 1);
+  var foodIsInBackpack = this.backpack.find(function(backpackFood) {
+    return food.name === backpackFood.name
+  })
 
   var isFaveFood = (food.name === this.favouriteFood)
 
+  if ( foodIsInBackpack ) {
 
-  if (isFaveFood && food.replenishmentValue > 0) {
-    this.health += (food.replenishmentValue * 1.5)
-    if (this.health > this.fullHealth) {
-      this.health = this.fullHealth;
+    this.backpack.splice(foodIsInBackpack, 1);
+
+    if (isFaveFood && food.replenishmentValue > 0) {
+      this.health += (food.replenishmentValue * 1.5)
+      if (this.health > this.fullHealth) {
+        this.health = this.fullHealth;
+      }
+    } else {
+    this.health += food.replenishmentValue;
+      if (this.health > this.fullHealth) {
+        this.health = this.fullHealth;
+      }
     }
-  } else {
-  this.health += food.replenishmentValue;
-    if (this.health > this.fullHealth) {
-      this.health = this.fullHealth;
-    }
+
   }
-
 }
-
-
-// Hero.prototype.eat = function(food) {
-//   var foodIsInBackpack = this.backpack.indexOf(food);
-//   this.backpack.splice(foodIsInBackpack, 1);
-//
-//   var isFaveFood = (foodIsInBackpack.name === this.favouriteFood)
-//
-//
-//   if (isFaveFood && foodIsInBackpack.replenishmentValue > 0) {
-//     this.health += (foodIsInBackpack.replenishmentValue * 1.5)
-//     if (this.health > this.fullHealth) {
-//       this.health = this.fullHealth;
-//     }
-//   } else {
-//   this.health += foodIsInBackpack.replenishmentValue;
-//     if (this.health > this.fullHealth) {
-//       this.health = this.fullHealth;
-//     }
-//   }
-//
-// }
-
-
-
-
 
 
 Hero.prototype.addTask = function(task) {

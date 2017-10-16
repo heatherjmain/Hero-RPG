@@ -61,15 +61,23 @@ describe("Hero", function() {
   });
 
   it("should be able to eat food from backpack and increase health by replensihment value", function() {
-    // crow1.collectFood(hero1, pear);
-    // crow1.collectFood(hero1, banana);
+    crow1.collectFood(hero1, tomato);
+    crow1.collectFood(hero1, banana);
     hero1.eat(tomato);
     assert.strictEqual(hero1.health, 107);
-    // assert.deepStrictEqual(hero1.backpack.length, 2);
+    assert.strictEqual(hero1.backpack.length, 1);
   });
 
+  it("should not be able to eat food not present in backpack", function() {
+    crow1.collectFood(hero1, pear);
+    crow1.collectFood(hero1, banana);
+    hero1.eat(tomato);
+    assert.strictEqual(hero1.health, 100);
+    assert.strictEqual(hero1.backpack.length, 2);
+  })
+
   it("should increase health by 1.5 x replenishment value if food is favourite food", function() {
-    // crow1.collectFood(banana);
+    crow1.collectFood(hero1, banana);
     hero1.eat(banana);
     assert.strictEqual(hero1.health, 115);
   });
@@ -80,60 +88,53 @@ describe("Hero", function() {
     assert.strictEqual(hero1.tasks[0].description, "Save the World");
   });
 
-  it("should be able to sort tasks by difficulty", function() {
-    hero1.addTask(task1);
-    hero1.addTask(task2);
-    hero1.addTask(task3);
-    hero1.sortTasks('difficultyLevel');
-    assert.deepStrictEqual(hero1.tasks, [task2, task3, task1]);
+  describe("When tasks have been added to hero", function() {
+
+    beforeEach(function(){
+      hero1.addTask(task1);
+      hero1.addTask(task2);
+      hero1.addTask(task3);
+    })
+
+    it("should be able to sort tasks by difficulty", function() {
+      hero1.sortTasks('difficultyLevel');
+      assert.deepStrictEqual(hero1.tasks, [task2, task3, task1]);
+    })
+
+    it("should be able to sort tasks by urgency", function() {
+      hero1.sortTasks('urgencyLevel');
+      assert.deepStrictEqual(hero1.tasks, [task1, task3, task2]);
+    })
+
+    it("should be able to sort tasks by reward", function() {
+      hero1.sortTasks('reward');
+      assert.deepStrictEqual(hero1.tasks, [task2, task3, task1]);
+    });
+
+    it("should be able to complete a task and earn xpPoints", function() {
+      hero1.completeTask(task1);
+      assert.strictEqual(hero1.tasks[0].complete, true);
+      assert.strictEqual(hero1.xpPoints, 500);
+    });
+
+    it("should be able to view all complete tasks", function() {
+      hero1.completeTask(task1);
+      hero1.completeTask(task2);
+      assert.deepStrictEqual(hero1.viewCompleteOrIncompleteTasks(true), [task1, task2]);
+    });
+
+    it("should be able to view all incomplete tasks", function() {
+      hero1.completeTask(task1);
+      hero1.completeTask(task2);
+      assert.deepStrictEqual(hero1.viewCompleteOrIncompleteTasks(false), [task3]);
+    });
+
   })
 
-  it("should be able to sort tasks by urgency", function() {
-    hero1.addTask(task1);
-    hero1.addTask(task2);
-    hero1.addTask(task3);
-    hero1.sortTasks('urgencyLevel');
-    assert.deepStrictEqual(hero1.tasks, [task1, task3, task2]);
-  })
-
-  it("should be able to sort tasks by reward", function() {
-    hero1.addTask(task1);
-    hero1.addTask(task2);
-    hero1.addTask(task3);
-    hero1.sortTasks('reward');
-    assert.deepStrictEqual(hero1.tasks, [task2, task3, task1]);
-  });
-
-  it("should be able to complete a task and earn xpPoints", function() {
-    hero1.addTask(task1);
-    hero1.addTask(task2);
-    hero1.addTask(task3);
-    hero1.completeTask(task1);
-    assert.strictEqual(hero1.tasks[0].complete, true);
-    assert.strictEqual(hero1.xpPoints, 500);
-  });
-
-  it("should be able to view all complete tasks", function() {
-    hero1.addTask(task1);
-    hero1.addTask(task2);
-    hero1.addTask(task3);
-    hero1.completeTask(task1);
-    hero1.completeTask(task2);
-    assert.deepStrictEqual(hero1.viewCompleteOrIncompleteTasks(true), [task1, task2]);
-  });
-
-  it("should be able to view all incomplete tasks", function() {
-    hero1.addTask(task1);
-    hero1.addTask(task2);
-    hero1.addTask(task3);
-    hero1.completeTask(task1);
-    hero1.completeTask(task2);
-    assert.deepStrictEqual(hero1.viewCompleteOrIncompleteTasks(false), [task3]);
-  });
 
   it("should lose health when consuming poisonous food", function() {
-    // crow1.collectFood(banana);
-    // crow1.collectFood(tomato);
+    crow1.collectFood(hero1, banana);
+    crow1.collectFood(hero1, tomato);
     rat1.touchFood(banana);
     rat1.touchFood(tomato);
     hero1.eat(banana);
@@ -142,11 +143,11 @@ describe("Hero", function() {
   });
 
   it("should have a moximum health value of 150", function() {
-    // crow1.collectFood(banana);
-    // crow1.collectFood(banana);
-    // crow1.collectFood(banana);
-    // crow1.collectFood(banana);
-    // crow1.collectFood(banana);
+    crow1.collectFood(hero1, banana);
+    crow1.collectFood(hero1, banana);
+    crow1.collectFood(hero1, banana);
+    crow1.collectFood(hero1, banana);
+    crow1.collectFood(hero1, banana);
     hero1.eat(banana);
     hero1.eat(banana);
     hero1.eat(banana);
@@ -176,8 +177,8 @@ describe("Hero", function() {
   });
 
   it("should be able to win battle", function() {
-    // crow1.collectFood(banana);
-    // crow1.collectFood(banana);
+    crow1.collectFood(hero1, banana);
+    crow1.collectFood(hero1, banana);
     baddie1.attack(hero1);
     hero1.attack(baddie1);
     baddie1.attack(hero1);
@@ -199,9 +200,9 @@ describe("Hero", function() {
   });
 
   it("should be able to lose battle", function() {
-    // crow1.collectFood(tomato);
-    // crow1.collectFood(banana);
-    // crow1.collectFood(banana);
+    crow1.collectFood(hero1, tomato);
+    crow1.collectFood(hero1, banana);
+    crow1.collectFood(hero1, banana);
     rat1.touchFood(banana);
     baddie1.attack(hero1);
     baddie1.attack(hero1);
